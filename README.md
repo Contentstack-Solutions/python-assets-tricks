@@ -10,7 +10,7 @@ Playing around with Assets - Finding unreferenced assets and moving them between
 ## Define environmental variables
 e.g. `variables.env` file:
 ```
-CS_REGION=NA
+CS_REGION=NA (Either NA or EU)
 CS_APIKEY=blt972.....
 CS_MANAGEMENTOKEN=cs....
 
