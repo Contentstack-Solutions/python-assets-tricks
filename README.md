@@ -28,7 +28,7 @@ Available methods (Just uncomment chosen method):
  * Delete unused asset (Be careful)
  * Write to a CSV report file
  * Update unused asset in Contentstack with a tag
- 
+
 2. Move Assets between folders - `moveAssetsBetweenFolders.py`
 
 You can run the script once to see uid's of all folders.
