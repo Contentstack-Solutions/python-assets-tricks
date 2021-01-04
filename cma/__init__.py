@@ -50,8 +50,8 @@ def logUrl(url):
     config.logging.debug('-------')
 
 
-def logError(endpointName, name, url, res):
-    config.logging.error('{}Failed creating/updating {} (Name: {}){}'.format(config.RED, endpointName, name, config.END))
+def logError(endpointName, name, url, res, msg='creating/updating'):
+    config.logging.error('{}Failed {} {} (Name: {}){}'.format(config.RED, msg, endpointName, name, config.END))
     config.logging.error('{}URL: {}{}'.format(config.RED, url, config.END))
     config.logging.error('{}HTTP Status Code: {}{}'.format(config.RED, res.status_code, config.END))
     config.logging.error('{red}Error Message: {txt}{end}'.format(red=config.RED, txt=res.text, end=config.END))
@@ -112,25 +112,25 @@ def typicalGetIterate(url, dictKey, environment=None):
     config.logging.info('No {} results'.format(dictKey))
     return None
 
-def typicalCreate(body, url, endpointName='', retry=False):
-    '''
-    Combining identical POST methods into one
-    '''
-    logUrl(url)
-    res = requests.post(url, headers=managementTokenHeader, json=body)
-    if res.status_code in (200, 201):
-        return res.json()
-    elif (res.status_code == 429) and not retry:
-        config.logging.warning('{}We are getting rate limited. Retrying in 2 seconds.{}'.format(config.YELLOW, config.END))
-        sleep(2) # We'll retry once in a second if we're getting rate limited.
-        return typicalCreate(body, url, endpointName, True)
-    if 'name' in body[endpointName]:
-        name = body[endpointName]['name']
-    elif 'title' in body[endpointName]:
-        name = body[endpointName]['title']
-    else:
-        name = 'noName'
-    return logError(endpointName, name, url, res)
+# def typicalCreate(body, url, endpointName='', retry=False):
+#     '''
+#     Combining identical POST methods into one
+#     '''
+#     logUrl(url)
+#     res = requests.post(url, headers=managementTokenHeader, json=body)
+#     if res.status_code in (200, 201):
+#         return res.json()
+#     elif (res.status_code == 429) and not retry:
+#         config.logging.warning('{}We are getting rate limited. Retrying in 2 seconds.{}'.format(config.YELLOW, config.END))
+#         sleep(2) # We'll retry once in a second if we're getting rate limited.
+#         return typicalCreate(body, url, endpointName, True)
+#     if 'name' in body[endpointName]:
+#         name = body[endpointName]['name']
+#     elif 'title' in body[endpointName]:
+#         name = body[endpointName]['title']
+#     else:
+#         name = 'noName'
+#     return logError(endpointName, name, url, res)
 
 def typicalUpdate(body, url, endpointName='', retry=False):
     '''
@@ -148,6 +148,53 @@ def typicalUpdate(body, url, endpointName='', retry=False):
     config.logging.error('{}Failed updating {} - {}{}'.format(config.RED, endpointName, str(res.text), config.END))
     return logError(endpointName, '', url, res) # Empty string was name variable
 
+
+def createAsset(filePath, metaData, filename):
+    '''
+    Upload Image/Asset
+    sample url: https://api.contentstack.io/v3/assets?relative_urls=false
+    documentation on endpoint: https://www.contentstack.com/docs/developers/apis/content-management-api/#upload-asset
+    '''
+    url = '{}v3/assets?relative_urls=false'.format(region)
+    contentTypeMeta = metaData['asset']['content_type']
+    # header = managementTokenHeader
+    # del header['Content-Type']
+    with open(filePath, 'rb') as f:
+        fileData = f.read()
+    files = {"asset[upload]": (filename, fileData, contentTypeMeta)}
+    payload = {}
+    if 'parent_uid' in metaData['asset']:
+        payload["asset[parent_uid]"] = (metaData['asset']['parent_uid'])    
+    if 'description' in metaData['asset']:
+        payload["asset[description]"] = (metaData['asset']['description'])
+    if 'title' in metaData['asset']:
+        payload["asset[title]"] = (metaData['asset']['title'])
+    if 'tags' in metaData['asset']:
+        payload["asset[tags]"] = (metaData['asset']['tags'])
+    res = requests.post(url, files=files, data=payload, headers=managementTokenHeader)
+    if res.status_code in (200, 201):
+        config.logging.info('Asset Uploaded. ({})'.format(filename))
+        return res.json()
+    return logError('asset', filename, url, res)
+
+def publishAsset(uid, locales, environments):
+    '''
+    Publishes an asset
+    sample url: https://api.contentstack.io/v3/assets/{asset_uid}/publish
+    documentation on endpoint: https://www.contentstack.com/docs/developers/apis/content-management-api/#publish-an-asset
+    '''
+    url = '{}v3/assets/{}/publish'.format(region, uid)
+    body = {
+        'asset': {
+            'locales': locales,
+            'environments': environments
+        }
+    }
+    res = requests.post(url, json=body, headers=managementTokenHeader)
+    if res.status_code in (200, 201):
+        config.logging.info('Asset Published. ({})'.format(uid))
+        return res.json()
+    return logError('asset', uid, url, res, 'publishing')
 
 def getAllAssets(query=None, environment=None):
     '''

@@ -1,5 +1,5 @@
 # python-assets-tricks
-Playing around with Assets - Finding unreferenced assets and moving them between folders
+Playing around with Assets - Creating them, publishing... Finding unreferenced assets and moving them between folders
 
 ## Prerequisites:
 * Contentstack Account.
@@ -18,7 +18,7 @@ export CS_REGION CS_APIKEY CS_MANAGEMENTOKEN
 ```
 and run `source variables.env` in the terminal.
 
-## Two scripts available
+## Three scripts available
 1. Find unused assets - `findUnusedAssets.py`
 
 Fetches all assets and iterated through them finding if any entries are referencing them.
@@ -29,7 +29,13 @@ Available methods (Just uncomment chosen method):
  * Write to a CSV report file
  * Update unused asset in Contentstack with a tag
 
-2. Move Assets between folders - `moveAssetsBetweenFolders.py`
+2. Move assets between folders - `moveAssetsBetweenFolders.py`
 
 You can run the script once to see uid's of all folders.
 Then define the source and destination uid's in the script - and run again.
+
+3. Bulk create assets and publish them - `bulkCreateAndPublishAssets.py`
+
+Reads files from a folder and attempts to upload all of them to Contentstack and then publish them.
+You can specify a folder uid where you want to upload - Set to None if you want to upload to the root folder.
+Comment out comment if you don't want to publish asset right after uploading.
