@@ -1,5 +1,5 @@
 # python-assets-tricks
-Playing around with Assets - Creating them, publishing... Finding unreferenced assets and moving them between folders
+Playing around with Assets - Creating, publishing, finding unused ones,  moving them between folders.
 
 ## Prerequisites:
 * Contentstack Account.
@@ -38,4 +38,4 @@ Then define the source and destination uid's in the script - and run again.
 
 Reads files from a folder and attempts to upload all of them to Contentstack and then publish them.
 You can specify a folder uid where you want to upload - Set to None if you want to upload to the root folder.
-Comment out comment if you don't want to publish asset right after uploading.
+Comment out if you don't want to publish asset right after uploading.
