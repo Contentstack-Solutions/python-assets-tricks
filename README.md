@@ -1,5 +1,7 @@
 # python-assets-tricks
-*Not Officially Supported by Contentstack*
+
+**Not Officially Supported by Contentstack**
+
 Playing around with Assets - Creating, publishing, finding unused ones,  moving them between folders.
 
 ## Prerequisites:
