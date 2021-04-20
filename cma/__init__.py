@@ -176,16 +176,16 @@ def publishAsset(uid, locales, environments):
         return res.json()
     return logError('asset', uid, url, res, 'publishing')
 
-def getAllAssets(query=None, environment=None):
+def getAllAssets(query=None, environment=None, folders=False):
     '''
     Get All Assets (Content Management API)
-    sample url: https://api.contentstack.io/v3/assets?include_folders=true&include_publish_details=true&include_count=true&relative_urls=false&environment={environment}&query={"is_dir": False}
+    sample url: https://api.contentstack.io/v3/assets?include_folders=true&include_publish_details=true&include_count=true&relative_urls=false&environment={environment}
     '''
-    url = '{region}v3/assets?include_folders=true&include_publish_details=true&include_count=true&relative_urls=false'.format(region=region)
+    url = '{region}v3/assets?include_publish_details=true&include_count=true&relative_urls=false'.format(region=region)
     if query:
         url = url + query
-    else:
-        url = url + '&query={{"is_dir": false}}'
+    if folders:
+        url = url + '&include_folders=true'
     return typicalGetIterate(url, 'assets', environment)
 
 def getSingleAsset(uid):
