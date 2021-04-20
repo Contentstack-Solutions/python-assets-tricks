@@ -112,26 +112,6 @@ def typicalGetIterate(url, dictKey, environment=None):
     config.logging.info('No {} results'.format(dictKey))
     return None
 
-# def typicalCreate(body, url, endpointName='', retry=False):
-#     '''
-#     Combining identical POST methods into one
-#     '''
-#     logUrl(url)
-#     res = requests.post(url, headers=managementTokenHeader, json=body)
-#     if res.status_code in (200, 201):
-#         return res.json()
-#     elif (res.status_code == 429) and not retry:
-#         config.logging.warning('{}We are getting rate limited. Retrying in 2 seconds.{}'.format(config.YELLOW, config.END))
-#         sleep(2) # We'll retry once in a second if we're getting rate limited.
-#         return typicalCreate(body, url, endpointName, True)
-#     if 'name' in body[endpointName]:
-#         name = body[endpointName]['name']
-#     elif 'title' in body[endpointName]:
-#         name = body[endpointName]['title']
-#     else:
-#         name = 'noName'
-#     return logError(endpointName, name, url, res)
-
 def typicalUpdate(body, url, endpointName='', retry=False):
     '''
     Combining identical PUT methods into one
