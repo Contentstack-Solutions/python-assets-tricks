@@ -11,7 +11,7 @@ import config
 folder = '/tmp/tmpImages/' # Path to folder with all assets that you want to import. Must end with a '/'.
 locales = ['en-us'] # An array of languages - Used if you want to publish asset, can publish to more than one.
 environments = ['development'] # An array of environments - Used if you want to publish asset, can publish to more than one.
-parentFolder = 'bltc4b32745b2a66d24' # UID of parent folder being something like this: 'bltcbf66fcb8b9b3d6a' - Set to None if you want to import to root folder.
+parentFolder = None # UID of parent folder being something like this: 'bltcbf66fcb8b9b3d6a' - Set to None if you want to import to root folder.
 
 checkIfDuplicate = True # If set to True - the script checks if a file with the same name exists in the same folder in the DAM - If it exists, it skips uploading.
 publishAsset = True # If set to True we also attempt to publish the asset to defined environment(s)
