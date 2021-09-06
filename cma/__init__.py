@@ -86,7 +86,7 @@ def typicalGetIterate(url, dictKey, environment=None):
     count = 1 # Just making sure we check at least once. Setting the real count value in while loop
     if environment:
         url = url + '&environment={}'.format(environment)
-    print(url)
+    config.logging.debug(url)
     originalURL = url
     while skip <= count:
         url = iterateURL(originalURL, skip)
@@ -109,7 +109,7 @@ def typicalGetIterate(url, dictKey, environment=None):
             return None
     if result:
         return {dictKey: result}
-    config.logging.info('No {} results'.format(dictKey))
+    config.logging.debug('No {} results'.format(dictKey))
     return None
 
 def typicalUpdate(body, url, endpointName='', retry=False):
