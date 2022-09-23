@@ -27,7 +27,7 @@ def get_name(item):
     if item['parent_uid']:
         parent_folder_uid = item['parent_uid']
         name = get_name(folders[parent_folder_uid]) + '/' + name
-    return '%s %s' % (name, item['filename'])
+    return name
 
 for item in l['assets']:
     # build up tree
@@ -42,8 +42,10 @@ for key, value in sizes.items():
     if len(value) > 1:
         print('Files of size: ', key)
         for x in value:
-            print(items['x']['url'])
-            print(get_name(items[x]))
+            url = items[x]['url']
+            path = get_name(items[x])
+            fn = items[x]['filename']
+            print(fn, path, url)
         print()
 
 
