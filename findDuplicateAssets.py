@@ -15,14 +15,17 @@ import pprint
 import cma
 
 pp = pprint.PrettyPrinter(indent=4)
-l = cma.getAllAssets(folders=True) # Getting all assets from Stack
-# l = SimpleNamespace(**l)
+l = cma.getAllAssets(folders=True)
+
 
 sizes =  defaultdict(list) # dict with bytecount ints as keys and list of uids that have that size
-items = {} # dict with uids as keys and full item data as values
+assetmap = {} # dict with uids as keys and full item data as values
 folders = {}
 
 def get_name(item):
+    '''
+    item can be either asset or folder
+    '''
     name = item['name'] if item['is_dir'] else item['title']
     if item['parent_uid']:
         parent_folder_uid = item['parent_uid']
@@ -30,22 +33,27 @@ def get_name(item):
     return name
 
 for item in l['assets']:
-    # build up tree
     if item['is_dir']:
         folders[item['uid']] = item
     else:
         sizes[item['file_size']].append(item['uid'])
-        items[item['uid']] = item
+        assetmap[item['uid']] = item
 
 
 for key, value in sizes.items():
     if len(value) > 1:
         print('Files of size: ', key)
+        print('=================================')
         for x in value:
-            url = items[x]['url']
-            path = get_name(items[x])
-            fn = items[x]['filename']
-            print(fn, path, url)
+            url = assetmap[x]['url']
+            path = get_name(assetmap[x])
+            fn = assetmap[x]['filename']
+            print('Path    :', path)
+            print('Full URL:', url)
+            print('Filename:', fn)
+            print()
+        print('=================================')
+        print()
         print()
 
 
