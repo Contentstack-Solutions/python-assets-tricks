@@ -22,13 +22,13 @@ assetmap = {} # dict with uids as keys and full item data as values
 folders = {}
 
 def get_name(item):
-    '''
-    item can be either asset or folder
-    '''
     name = item['name'] if item['is_dir'] else item['title']
-    if item['parent_uid']:
-        parent_folder_uid = item['parent_uid']
-        name = get_name(folders[parent_folder_uid]) + '/' + name
+    try:
+        if item['parent_uid']:
+            parent_folder_uid = item['parent_uid']
+            name = get_name(folders[parent_folder_uid]) + '/' + name
+    except KeyError:
+        print('No parent specified:', item['uid'])
     return name
 
 for item in l['assets']:
@@ -54,5 +54,4 @@ for key, value in sizes.items():
         print('=================================')
         print()
         print()
-
 
