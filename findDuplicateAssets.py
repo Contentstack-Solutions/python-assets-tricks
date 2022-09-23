@@ -9,7 +9,6 @@ Environmental Variables needed:
  - CS_APIKEY (Stack API Key)
 '''
 from collections import defaultdict
-from types import SimpleNamespace
 import pprint
 
 import cma
