@@ -43,5 +43,9 @@ Reads files from a folder and attempts to upload all of them to Contentstack and
 You can specify a folder uid where you want to upload - Set to None if you want to upload to the root folder.
 Comment out if you don't want to publish asset right after uploading.
 
+4. Detect duplicate assets - `findDuplicateAssets.py`
+
+Fetches data on all assets and groups based on filesize. 
+
 ## License
 This project is covered under the MIT license
