@@ -224,6 +224,22 @@ def updateFolder(uid, body):
     body = {'asset': body}
     return typicalUpdate(body, url, 'asset')
 
+def deleteFolder(uid, retry=False):
+    '''
+    Delete a Folder - !!!Be careful here!!!
+    sample url: https://api.contentstack.io/v3/assets/folders/{folder_uid}
+    '''
+    url = '{region}v3/assets/folders/{uid}'.format(region=region, uid=uid)
+    res = requests.delete(url, headers=managementTokenHeader)
+    if res.status_code in (200, 201):
+        config.logging.info('Folder {} deleted'.format(uid))
+        return res.json()
+    elif (res.status_code == 429) and not retry:
+        config.logging.warning('{}We are getting rate limited. Retrying in 2 seconds.{}'.format(config.YELLOW, config.END))
+        sleep(2) # We'll retry once in a second if we're getting rate limited.
+        return deleteFolder(uid, True)
+    config.logging.error('{}Failed deleting folder - {}{}'.format(config.RED, str(res.text), config.END))
+    return logError('folder', '', url, res) # Empty string was name variable
 
 def deleteAsset(uid, retry=False):
     '''
