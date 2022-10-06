@@ -30,7 +30,6 @@ deleteEmptyFolders = False # Set to True if you want to Delete the empty folders
 
 parentArr = []
 folderArr = []
-
 for asset in assets['assets']:
     if asset['is_dir']:
         folderArr.append(asset)
