@@ -21,7 +21,7 @@ export CS_REGION CS_APIKEY CS_MANAGEMENTOKEN
 ```
 and run `source variables.env` in the terminal.
 
-## Three scripts available
+## Scripts in this repository
 1. Find unused assets - `findUnusedAssets.py`
 
 Fetches all assets and iterated through them finding if any entries are referencing them.
