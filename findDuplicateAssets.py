@@ -3,6 +3,11 @@ Finds assets that are duplicated in a stack.
 vidar.masson@contentstack.com
 2022-09-22
 
+------Update 2024-01-17------
+oskar.eiriksson@contentstack.com
+Optionally also prints out the entries that reference the assets.
+------Update 2024-01-17------
+
 Environmental Variables needed:
  - CS_REGION = EU/NA (Europe/North-America)
  - CS_MANAGEMENTOKEN (Stack Management Token)
@@ -16,6 +21,7 @@ import cma
 pp = pprint.PrettyPrinter(indent=4)
 l = cma.getAllAssets(folders=True)
 
+findReferences = True # If set to True it will execute slower as it will check all entries for references to the asset and print out
 
 sizes =  defaultdict(list) # dict with bytecount ints as keys and list of uids that have that size
 assetmap = {} # dict with uids as keys and full item data as values
@@ -30,6 +36,14 @@ def get_name(item):
     except KeyError:
         print('No parent specified:', item['uid'])
     return name
+
+def findAssetReferences(uid):
+    references = cma.getAssetReferences(uid)
+    refStr = ''
+    for entry in references['references']:
+        refStr += '\n Content Type: ' + entry['content_type_uid'] + ', Entry UID: ' + entry['entry_uid'] + ', Locale: ' + entry['locale']
+    return refStr
+
 
 for item in l['assets']:
     if item['is_dir']:
@@ -47,9 +61,14 @@ for key, value in sizes.items():
             url = assetmap[x]['url']
             path = get_name(assetmap[x])
             fn = assetmap[x]['filename']
+            if findReferences:
+                references = findAssetReferences(assetmap[x]['uid'])
+        
             print('Path    :', path)
             print('Full URL:', url)
             print('Filename:', fn)
+            if findReferences:
+                print('Referenced in entries:', references)
             print()
         print('=================================')
         print()
